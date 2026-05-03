@@ -1,0 +1,9 @@
+requires:
+  PSRule.Rules.Azure: '>=1.0.0'
+
+configuration:
+  AZURE_BICEP_FILE_EXPANSION: true
+  AZURE_PARAMETER_FILE_EXPANSION: true
+  AZURE_SUBSCRIPTION:
+    subscriptionId: '00000000-0000-0000-0000-000000000000'
+    tenantId: '00000000-0000-0000-0000-000000000000'

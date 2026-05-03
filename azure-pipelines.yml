@@ -1,0 +1,15 @@
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+  - task: ps-rule-assert@2
+    displayName: Analyze Azure template files
+    inputs:
+      modules: 'PSRule.Rules.Azure'
+      outputFormat: Sarif
+      outputPath: reports/ps-rule-results.sarif
