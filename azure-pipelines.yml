@@ -7,19 +7,7 @@ pool:
 
 steps:
 
-  # - task: ps-rule-assert@2
-  #   displayName: Analyze Azure template files
-  #   continueOnError: true
-  #   inputs:
-  #     modules: 'PSRule.Rules.Azure'
-  #     format: File
-  #     outputFormat: Sarif
-  #     outputPath: reports/ps-rule-results.sarif
-  #     inputPath: src/
-  #     option: '.psrule/ps-rule.yaml'
-
-
-# Execute run-azure-psrule.ps1 script directly to generate SARIF output
+  # Execute run-azure-psrule.ps1 script directly to generate SARIF output
   - task: PowerShell@2
     displayName: Analyze Azure template files with PSRule
     continueOnError: true
