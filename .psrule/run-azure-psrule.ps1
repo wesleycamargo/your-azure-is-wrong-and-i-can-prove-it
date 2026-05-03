@@ -1,44 +1,64 @@
 [CmdletBinding()]
 param (
-    [Parameter()]
-    [string]$WorkspaceDirectory
+    [Parameter(Mandatory)]
+    [string]$WorkspaceDirectory,
 
+    [Parameter()]
+    [string]$SourcePath = 'src/vm-simple-windows',
+
+    [Parameter()]
+    [string]$OutputPath = 'reports',
+
+    [Parameter()]
+    [ValidateSet('Sarif', 'Json', 'Yaml', 'Csv', 'NUnit3', 'JUnit')]
+    [string]$OutputFormat = 'Sarif'
 )
+
+$ErrorActionPreference = 'Stop'
 
 #--------------------------------
 # Install PSRule.Rules.Azure
 #--------------------------------
 
-$modules = @('PSRule.Rules.Azure')
-if (-not (Get-Module -ListAvailable -Name $modules)) {
-    Write-Host "Installing PSRule.Rules.Azure module..." -ForegroundColor Green
-    Install-Module -Name $modules -Scope CurrentUser -Force -ErrorAction Stop;
-}
-else {
-    Write-Host "PSRule.Rules.Azure module is already installed." -ForegroundColor Green
-}
-
-
-
-
-Push-Location "$workspaceDirectory/src/vm-simple-windows"
-
-$outputPath = "$WorkspaceDirectory/reports"
-$outputFile = "$outputPath/ps-rule-results-$(Get-Date -Format 'yyyyMMdd-HHmmss').sarif"
-
-if (-not (Test-Path -Path $outputPath)) {
-    New-Item -ItemType Directory -Path $outputPath | Out-Null
+$requiredModules = @('PSRule.Rules.Azure')
+foreach ($module in $requiredModules) {
+    if (-not (Get-Module -ListAvailable -Name $module)) {
+        Write-Host "Installing $module module..." -ForegroundColor Green
+        Install-Module -Name $module -Scope CurrentUser -Force -ErrorAction Stop
+    }
+    else {
+        Write-Host "$module module is already installed." -ForegroundColor Green
+    }
 }
 
-$psRuleParams = @{
-    InputPath    = '.'
-    Module       = $modules
-    Format       = 'File'
-    Option       = "$WorkspaceDirectory/.psrule/ps-rule.yaml"
-    OutputFormat = 'Sarif'
-    OutputPath   = $outputFile
+$extensionMap = @{
+    Sarif  = 'sarif'
+    Json   = 'json'
+    Yaml   = 'yaml'
+    Csv    = 'csv'
+    NUnit3 = 'xml'
+    JUnit  = 'xml'
+}
+$resolvedOutputPath = [System.IO.Path]::IsPathRooted($OutputPath) ? $OutputPath : "$WorkspaceDirectory/$OutputPath"
+$outputFile = "$resolvedOutputPath/ps-rule-results-$(Get-Date -Format 'yyyyMMdd-HHmmss').$($extensionMap[$OutputFormat])"
+
+if (-not (Test-Path -Path $resolvedOutputPath)) {
+    New-Item -ItemType Directory -Path $resolvedOutputPath | Out-Null
 }
 
-Assert-PSRule @psRuleParams
+Push-Location "$WorkspaceDirectory/$SourcePath"
+try {
+    $psRuleParams = @{
+        InputPath    = '.'
+        Module       = $requiredModules
+        Format       = 'File'
+        Option       = "$WorkspaceDirectory/.psrule/ps-rule.yaml"
+        OutputFormat = $OutputFormat
+        OutputPath   = $outputFile
+    }
 
-Pop-Location
+    Assert-PSRule @psRuleParams
+}
+finally {
+    Pop-Location
+}

@@ -25,7 +25,11 @@ steps:
     continueOnError: true
     inputs:
       filePath: '.psrule/run-azure-psrule.ps1'
-      arguments: '-WorkspaceDirectory $(Build.SourcesDirectory)'
+      arguments: >-
+        -WorkspaceDirectory $(Build.SourcesDirectory)
+        -SourcePath src/vm-simple-windows
+        -OutputPath reports
+        -OutputFormat Sarif
       pwsh: true
 
 

@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Azure PSRule - Azure Quick Start Templates",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${workspaceFolder}/.psrule/run-azure-psrule.ps1",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "-WorkspaceDirectory ${workspaceFolder}",
+                "-SourcePath src/vm-simple-windows",
+                "-OutputPath reports",
+                "-OutputFormat Sarif"
+            ]
+        },
+        {
+            "name": "PowerShell: Launch Current File",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${file}",
+            "args": []
+        }
+    ]
+}
