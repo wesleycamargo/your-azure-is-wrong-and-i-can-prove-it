@@ -14,6 +14,7 @@ steps:
       outputFormat: Sarif
       outputPath: reports/ps-rule-results.sarif
       inputPath: src/
+      options: '/.psrule/ps-rule.yaml'
 
   # TO be analysed by https://marketplace.visualstudio.com/items?itemName=sariftools.scans
   - task: PublishBuildArtifacts@1
