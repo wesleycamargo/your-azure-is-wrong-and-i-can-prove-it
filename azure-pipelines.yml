@@ -14,3 +14,9 @@ steps:
       outputFormat: Sarif
       outputPath: reports/ps-rule-results.sarif
       inputPath: src/
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish PSRule results
+    inputs:
+      PathtoPublish: 'reports'
+      ArtifactName: 'ps-rule-results'
