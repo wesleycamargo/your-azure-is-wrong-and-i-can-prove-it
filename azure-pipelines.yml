@@ -15,8 +15,9 @@ steps:
       outputPath: reports/ps-rule-results.sarif
       inputPath: src/
 
+  # TO be analysed by https://marketplace.visualstudio.com/items?itemName=sariftools.scans
   - task: PublishBuildArtifacts@1
     displayName: Publish PSRule results
     inputs:
       PathtoPublish: 'reports'
-      ArtifactName: 'ps-rule-results'
+      ArtifactName: 'CodeAnalysisLogs'
