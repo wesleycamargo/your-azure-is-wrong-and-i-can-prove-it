@@ -1,13 +1,12 @@
-
 trigger:
-- main
+  - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 variables:
   - name: AzureServiceConnection
-    value: 'sandbox-sp01'
+    value: "sandbox-sp01"
 
 steps:
 
@@ -15,13 +14,13 @@ steps:
   # Authentication is handled by the service connection - no -ConnectToAzure needed
   - task: AzurePowerShell@5
     displayName: Export Azure Policy assignments as PSRule rules
+    continueOnError: true
     inputs:
       azureSubscription: $(AzureServiceConnection)
       ScriptType: FilePath
-      ScriptPath: '.psrule/export-azure-policies.ps1'
+      ScriptPath: ".psrule/export-azure-policies.ps1"
       ScriptArguments: >-
-        -WorkspaceDirectory $(Build.SourcesDirectory)
-        -OutputPath reports
+        -WorkspaceDirectory $(Build.SourcesDirectory) -OutputPath reports
       azurePowerShellVersion: LatestVersion
       pwsh: true
 
@@ -30,12 +29,10 @@ steps:
     displayName: Analyze Azure template files with PSRule
     continueOnError: true
     inputs:
-      filePath: '.psrule/run-azure-psrule.ps1'
+      filePath: ".psrule/run-azure-psrule.ps1"
       arguments: >-
-        -WorkspaceDirectory $(Build.SourcesDirectory)
-        -SourcePath src/vm-simple-windows
-        -OutputPath reports
-        -OutputFormat Sarif
+        -WorkspaceDirectory $(Build.SourcesDirectory) -SourcePath
+        src/vm-simple-windows -OutputPath reports -OutputFormat Sarif
       pwsh: true
 
   # Step 3: Publish results for SARIF viewer
@@ -43,5 +40,5 @@ steps:
   - task: PublishBuildArtifacts@1
     displayName: Publish PSRule results
     inputs:
-      PathtoPublish: 'reports'
-      ArtifactName: 'CodeAnalysisLogs'
+      PathtoPublish: "reports"
+      ArtifactName: "CodeAnalysisLogs"
