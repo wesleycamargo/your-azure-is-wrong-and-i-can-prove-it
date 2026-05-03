@@ -11,10 +11,11 @@ steps:
     displayName: Analyze Azure template files
     inputs:
       modules: 'PSRule.Rules.Azure'
+      format: File
       outputFormat: Sarif
       outputPath: reports/ps-rule-results.sarif
       inputPath: src/
-      options: '/.psrule/ps-rule.yaml'
+      options: '.psrule/ps-rule.yaml'
 
   # TO be analysed by https://marketplace.visualstudio.com/items?itemName=sariftools.scans
   - task: PublishBuildArtifacts@1
