@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param (
-    [Parameter(Mandatory)]
+    [Parameter()]
     [string]$SubscriptionId,
 
     [Parameter(Mandatory)]
@@ -39,8 +39,13 @@ if ($ConnectToAzure.IsPresent) {
     Connect-AzAccount -ErrorAction Stop
 }
 
-Write-Verbose "Setting subscription context: $SubscriptionId"
-Set-AzContext -Subscription $SubscriptionId -ErrorAction Stop
+if ($SubscriptionId) {
+    Write-Verbose "Setting subscription context: $SubscriptionId"
+    Set-AzContext -Subscription $SubscriptionId -ErrorAction Stop
+}
+else {
+    Write-Verbose 'Using existing Azure context (set by service connection or prior Connect-AzAccount)'
+}
 
 #--------------------------------
 # Export policy assignments

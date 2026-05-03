@@ -8,8 +8,6 @@ pool:
 variables:
   - name: AzureServiceConnection
     value: 'sandbox-sp01'
-  - name: AzureSubscriptionId
-    value: 'azure-pipelines.yml'
 
 steps:
 
@@ -22,7 +20,6 @@ steps:
       ScriptType: FilePath
       ScriptPath: '.psrule/export-azure-policies.ps1'
       ScriptArguments: >-
-        -SubscriptionId $(AzureSubscriptionId)
         -WorkspaceDirectory $(Build.SourcesDirectory)
         -OutputPath reports
       azurePowerShellVersion: LatestVersion
