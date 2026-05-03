@@ -1,0 +1,50 @@
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - name: AzureServiceConnection
+    value: 'sandbox-sp01'
+  - name: AzureSubscriptionId
+    value: 'azure-pipelines.yml'
+
+steps:
+
+  # Step 1: Export Azure Policy assignments and convert to .Rule.jsonc
+  # Authentication is handled by the service connection - no -ConnectToAzure needed
+  - task: AzurePowerShell@5
+    displayName: Export Azure Policy assignments as PSRule rules
+    inputs:
+      azureSubscription: $(AzureServiceConnection)
+      ScriptType: FilePath
+      ScriptPath: '.psrule/export-azure-policies.ps1'
+      ScriptArguments: >-
+        -SubscriptionId $(AzureSubscriptionId)
+        -WorkspaceDirectory $(Build.SourcesDirectory)
+        -OutputPath reports
+      azurePowerShellVersion: LatestVersion
+      pwsh: true
+
+  # Step 2: Analyze IaC files using PSRule, including any exported policy rules
+  - task: PowerShell@2
+    displayName: Analyze Azure template files with PSRule
+    continueOnError: true
+    inputs:
+      filePath: '.psrule/run-azure-psrule.ps1'
+      arguments: >-
+        -WorkspaceDirectory $(Build.SourcesDirectory)
+        -SourcePath src/vm-simple-windows
+        -OutputPath reports
+        -OutputFormat Sarif
+      pwsh: true
+
+  # Step 3: Publish results for SARIF viewer
+  # https://marketplace.visualstudio.com/items?itemName=sariftools.scans
+  - task: PublishBuildArtifacts@1
+    displayName: Publish PSRule results
+    inputs:
+      PathtoPublish: 'reports'
+      ArtifactName: 'CodeAnalysisLogs'

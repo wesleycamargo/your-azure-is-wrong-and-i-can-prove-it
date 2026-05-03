@@ -18,6 +18,19 @@
             ]
         },
         {
+            "name": "Export Azure Policy Assignments",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${workspaceFolder}/.psrule/export-azure-policies.ps1",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "-SubscriptionId bf464f0e-1ec2-40f4-b033-b13f71a85729",
+                "-WorkspaceDirectory ${workspaceFolder}",
+                "-OutputPath reports",
+                "-ConnectToAzure"
+            ]
+        },
+        {
             "name": "PowerShell: Launch Current File",
             "type": "PowerShell",
             "request": "launch",

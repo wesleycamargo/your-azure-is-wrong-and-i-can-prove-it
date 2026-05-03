@@ -19,7 +19,6 @@ $ErrorActionPreference = 'Stop'
 #--------------------------------
 # Install PSRule.Rules.Azure
 #--------------------------------
-
 $requiredModules = @('PSRule.Rules.Azure')
 foreach ($module in $requiredModules) {
     if (-not (Get-Module -ListAvailable -Name $module)) {
