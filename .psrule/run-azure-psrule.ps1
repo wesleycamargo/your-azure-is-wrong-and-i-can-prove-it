@@ -23,8 +23,8 @@ else {
 
 Push-Location "$workspaceDirectory/src/vm-simple-windows"
 
-$outputPath = "$WorkspaceDirectory/.psrule/outputs"
-$outputFile = "$outputPath/results-$(Get-Date -Format 'yyyyMMdd-HHmmss').md"
+$outputPath = "$WorkspaceDirectory/reports"
+$outputFile = "$outputPath/ps-rule-results-$(Get-Date -Format 'yyyyMMdd-HHmmss').sarif"
 
 if (-not (Test-Path -Path $outputPath)) {
     New-Item -ItemType Directory -Path $outputPath | Out-Null
@@ -35,7 +35,7 @@ $psRuleParams = @{
     Module       = $modules
     Format       = 'File'
     Option       = "$WorkspaceDirectory/.psrule/ps-rule.yaml"
-    OutputFormat = 'Markdown'
+    OutputFormat = 'Sarif'
     OutputPath   = $outputFile
 }
 
