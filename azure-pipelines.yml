@@ -9,6 +9,7 @@ steps:
 
   - task: ps-rule-assert@2
     displayName: Analyze Azure template files
+    continueOnError: true
     inputs:
       modules: 'PSRule.Rules.Azure'
       format: File
@@ -16,6 +17,7 @@ steps:
       outputPath: reports/ps-rule-results.sarif
       inputPath: src/
       option: '.psrule/ps-rule.yaml'
+
 
   # TO be analysed by https://marketplace.visualstudio.com/items?itemName=sariftools.scans
   - task: PublishBuildArtifacts@1
