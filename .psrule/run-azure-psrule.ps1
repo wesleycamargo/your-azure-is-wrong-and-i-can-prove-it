@@ -10,7 +10,7 @@ param (
     [string]$OutputPath = 'reports',
 
     [Parameter()]
-    [ValidateSet('Sarif', 'Json', 'Yaml', 'Csv', 'NUnit3', 'JUnit')]
+    [ValidateSet('Sarif', 'Json', 'Yaml', 'Csv', 'NUnit3', 'JUnit', 'Markdown')]
     [string]$OutputFormat = 'Sarif'
 )
 
@@ -37,6 +37,7 @@ $extensionMap = @{
     Csv    = 'csv'
     NUnit3 = 'xml'
     JUnit  = 'xml'
+    Markdown = 'md'
 }
 $resolvedOutputPath = [System.IO.Path]::IsPathRooted($OutputPath) ? $OutputPath : "$WorkspaceDirectory/$OutputPath"
 $outputFile = "$resolvedOutputPath/ps-rule-results-$(Get-Date -Format 'yyyyMMdd-HHmmss').$($extensionMap[$OutputFormat])"

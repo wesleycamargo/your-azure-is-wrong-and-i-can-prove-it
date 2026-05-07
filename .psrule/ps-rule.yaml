@@ -1,9 +1,6 @@
 requires:
   PSRule.Rules.Azure: '>=1.0.0'
 
-repository:
-  url: 'https://github.com/wesleycamargo/your-azure-is-wrong-and-i-can-prove-it'
-
 configuration:
   AZURE_BICEP_FILE_EXPANSION: true
   AZURE_PARAMETER_FILE_EXPANSION: true
